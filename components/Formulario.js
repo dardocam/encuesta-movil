@@ -1,12 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, TextInput, Button, Text, StyleSheet, Alert } from "react-native";
 import db from "../firebaseConfig"; // Asegúrate de que la ruta sea correcta
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+
+import * as Location from "expo-location";
 
 export default Formulario = () => {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
+
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+
+  let text = "Waiting..";
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+  }
 
   const guardarDatos = async () => {
     if (nombre === "" || email === "" || telefono === "") {
@@ -54,6 +79,7 @@ export default Formulario = () => {
         keyboardType="phone-pad"
       />
       <Button title="Guardar Datos" onPress={guardarDatos} />
+      <Text style={styles.paragraph}>{text}</Text>
     </View>
   );
 };
