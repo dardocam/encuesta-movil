@@ -1,0 +1,8 @@
+debemos ingresar en el proyecto de firebase e ir a la ruedita --> configuracion del proyecto
+https://console.firebase.google.com/u/0/project/bamboo-clone-400516/overview
+
+
+desde configuracion del proyecto agregamos app web y nos va a dar las credenciales del firebaseConfig.js
+
+hay que crear una base de datos y una coleccion en firestore database
+en nuestro caso al crear la base de datos (default) la hicimos publica para no tener problemas de permisos
